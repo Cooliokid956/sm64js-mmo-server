@@ -282,7 +282,7 @@ impl Handler<server::Message> for Sm64JsWsSession {
     fn handle(&mut self, msg: server::Message, ctx: &mut Self::Context) {
         match msg {
             server::Message::SendData(data) => ctx.binary(data),
-            server::Message::Kick => ctx.stop(),
+            server::Message::Kick => {},
         }
     }
 }

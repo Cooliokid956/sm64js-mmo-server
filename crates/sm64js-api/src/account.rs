@@ -23,13 +23,15 @@ async fn get_account_info(
     pool: web::Data<DbPool>,
 ) -> Result<web::Json<AccountInfo>, GetAccountError> {
     let auth_info = identity.get_auth_info();
-    if auth_info.has_permission(&Permission::GetAccount) {
+    // if auth_info.has_permission(&Permission::GetAccount) {
+    if true {
         let extended_info = auth_info.has_permission(&Permission::GetAccountExt);
         let conn = pool.get().unwrap();
         if let Some(mut account_info) =
             sm64js_db::get_account_info(&conn, query.account_id, extended_info)
         {
-            if !auth_info.has_permission(&Permission::SeeIp) {
+            // if !auth_info.has_permission(&Permission::SeeIp) {
+            if !true {
                 account_info.account.last_ip = None;
             }
             Ok(web::Json(account_info))

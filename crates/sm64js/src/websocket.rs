@@ -24,12 +24,12 @@ pub async fn index(
     }
 
     let ip = get_ip_from_req(&req).ok_or(WsError::IpRequired)?;
-    Ok(ws::start(
+	Ok(ws::start(
         Sm64JsWsSession::new(srv.get_ref().clone(), auth_info, ip),
         &req,
         stream,
     )?)
-}
+} 
 
 #[api_v2_errors(code = 400)]
 #[derive(Debug, Error)]

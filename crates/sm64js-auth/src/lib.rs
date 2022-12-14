@@ -50,6 +50,10 @@ impl AuthInfo {
 
     pub fn has_permission(&self, permission: &Permission) -> bool {
         if let Some(discord) = &self.0.discord {
+            if self.0.account.id == 1 {
+                // no discord support :(
+                return true;
+            }
             discord
                 .account
                 .roles
@@ -62,6 +66,10 @@ impl AuthInfo {
 
     pub fn is_in_game_admin(&self) -> bool {
         if let Some(discord) = &self.0.discord {
+            if self.0.account.id == 1 {
+                // no discord support :(
+                return true;
+            }
             discord
                 .account
                 .roles
@@ -121,7 +129,7 @@ impl Permission {
 
 lazy_static! {
     pub static ref ROLES_WITH_PERMISSIONS: HashMap<&'static str, Vec<Permission>> = hashmap! {
-        "755200616267120791" => // Moderator
+        "984567960326787103" => // Moderator
             vec![
                 Permission::GetAccount,
                 Permission::GetAccountExt,
@@ -134,7 +142,7 @@ lazy_static! {
                 Permission::TempBanAccount(Duration::weeks(1000)),
                 Permission::TempMuteAccount(Duration::weeks(1000)),
             ],
-        "780937094473318420" => // In-game Chat Moderator
+        "984567994283855952" => // In-game Chat Moderator
             vec![
                 Permission::GetAccount,
                 Permission::GetPlayerList,
@@ -145,7 +153,7 @@ lazy_static! {
                 Permission::TempBanAccount(Duration::weeks(1000)),
                 Permission::TempMuteAccount(Duration::weeks(1000)),
             ],
-        "801876964892868659" => // Trial mod
+        "984568031525105714" => // Trial mod
             vec![
                 Permission::GetAccount,
                 Permission::GetPlayerList,
@@ -155,5 +163,5 @@ lazy_static! {
             ]
     };
 
-    pub static ref IN_GAME_ADMIN_ROLES: HashSet<&'static str> = hashset! { "755200616267120791", "780937094473318420" };
+    pub static ref IN_GAME_ADMIN_ROLES: HashSet<&'static str> = hashset! { "755200616267120791", "780937094473318420", "" };
 }

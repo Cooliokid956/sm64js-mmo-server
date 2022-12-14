@@ -25,8 +25,9 @@ async fn get_players(
     identity: Identity,
     srv: web::Data<Addr<Sm64JsServer>>,
 ) -> Result<web::Json<Vec<PlayerInfo>>, GetPlayerError> {
-    let auth_info = identity.get_auth_info();
-    if auth_info.has_permission(&Permission::GetPlayerList) {
+    // let auth_info = identity.get_auth_info();
+    // if auth_info.has_permission(&Permission::GetPlayerList) {
+	if true {
         Ok(web::Json(
             srv.send(sm64js_ws::GetPlayers {
                 include_chat: query.include_chat,

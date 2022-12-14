@@ -26,9 +26,10 @@ pub async fn main() -> std::io::Result<()> {
         add_word("sucks", Type::SAFE);
         add_word("stfu", Type::SAFE);
         add_word("to hell", Type::SAFE);
+        add_word("are hell", Type::SAFE);		
         add_word("ur mom", Type::SAFE);
 
-        add_word("mierda", Type::PROFANE);
+//        add_word("mierda", Type::PROFANE);
     }
     sm64js::main()?.await
 }

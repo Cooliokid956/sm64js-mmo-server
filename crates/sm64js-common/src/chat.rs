@@ -66,35 +66,35 @@ impl ChatHistory {
 
         let date = Utc::now() - Duration::seconds(15);
         let account_id = account_info.account.id;
-        let is_spam = self
-            .0
-            .iter()
-            .skip_while(|(k, _)| *k < &date)
-            .filter(|(k, v)| {
-                v.account_id == account_id && !self.0.get(*k).unwrap().is_spam.unwrap_or_default()
-            })
-            .count()
-            >= 3;
+        // let is_spam = self
+            // .0
+            // .iter()
+            // .skip_while(|(k, _)| *k < &date)
+            // .filter(|(k, v)| {
+                // v.account_id == account_id && !self.0.get(*k).unwrap().is_spam.unwrap_or_default()
+            // })
+            // .count()
+            // >= 3;
 
-        let date = Utc::now() - Duration::seconds(60);
-        let is_excessive_spam = self
-            .0
-            .iter()
-            .skip_while(|(k, _)| *k < &date)
-            .filter(|(_, v)| v.account_id == account_id)
-            .count()
-            >= 30;
+        // let date = Utc::now() - Duration::seconds(60);
+        // let is_excessive_spam = self
+            // .0
+            // .iter()
+            // .skip_while(|(k, _)| *k < &date)
+            // .filter(|(_, v)| v.account_id == account_id)
+            // .count()
+            // >= 30;
 
-        let is_screaming = if message.len() > 5 {
-            let alphabetic_count = message.chars().filter(|c| c.is_ascii_alphabetic()).count();
-            let screaming_count = message
-                .chars()
-                .filter(|c| c.is_ascii_alphabetic() && c.is_ascii_uppercase())
-                .count();
-            (screaming_count as f32 / alphabetic_count as f32) > 0.7
-        } else {
-            false
-        };
+        // let is_screaming = if message.len() > 5 {
+            // let alphabetic_count = message.chars().filter(|c| c.is_ascii_alphabetic()).count();
+            // let screaming_count = message
+                // .chars()
+                // .filter(|c| c.is_ascii_alphabetic() && c.is_ascii_uppercase())
+                // .count();
+            // (screaming_count as f32 / alphabetic_count as f32) > 0.7
+        // } else {
+            // false
+        // };
 
         let now = Utc::now();
         let discord_id = account_info.discord.clone().map(|d| d.id);
@@ -112,30 +112,31 @@ impl ChatHistory {
                 ip: Some(ip),
                 is_escaped: if is_escaped { Some(is_escaped) } else { None },
                 is_censored: if is_censored { Some(is_censored) } else { None },
-                is_spam: if is_spam { Some(is_spam) } else { None },
-                is_excessive_spam: if is_excessive_spam {
-                    Some(is_excessive_spam)
-                } else {
-                    None
-                },
-                is_screaming: if is_screaming {
-                    Some(is_screaming)
-                } else {
-                    None
-                },
+                // is_spam: if is_spam { Some(is_spam) } else { None },
+                // is_excessive_spam: if is_excessive_spam {
+                    // Some(is_excessive_spam)
+                // } else {
+                    // None
+                // },
+                // is_screaming: if is_screaming {
+                    // Some(is_screaming)
+                // } else {
+                    // None
+                // },
             },
         );
 
-        if is_excessive_spam {
-            return ChatResult::Err(ChatError::ExcessiveSpam);
-        } else if is_spam {
-            return ChatResult::Err(ChatError::Spam);
-        } else if is_screaming {
-            return ChatResult::Err(ChatError::Screaming);
-        }
+        // if is_excessive_spam {
+            // return ChatResult::Err(ChatError::ExcessiveSpam);
+        // } else if is_spam {
+            // return ChatResult::Err(ChatError::Spam);
+        // } else if is_screaming {
+            // return ChatResult::Err(ChatError::Screaming);
+        // }
 
         let message = message.to_string();
-        if !is_spam && !message.is_empty() {
+        // if !is_spam && !message.is_empty() {
+        if !message.is_empty() {
             let censored_message = censored_message.clone();
             actix::spawn(async move {
                 Self::send_discord_chat_message(
@@ -148,7 +149,8 @@ impl ChatHistory {
             });
         }
 
-        ChatResult::Ok((censored_message, is_spam))
+        // ChatResult::Ok((censored_message, is_spam))
+        ChatResult::Ok((censored_message))
     }
 
     pub fn get_messages(
@@ -270,13 +272,13 @@ pub struct ChatMessage {
     ip: Option<String>,
     is_escaped: Option<bool>,
     is_censored: Option<bool>,
-    is_spam: Option<bool>,
-    is_excessive_spam: Option<bool>,
-    is_screaming: Option<bool>,
+    // is_spam: Option<bool>,
+    // is_excessive_spam: Option<bool>,
+    // is_screaming: Option<bool>,
 }
 
 pub enum ChatResult {
-    Ok((String, bool)),
+    Ok((String/*, bool*/)),
     Err(ChatError),
     NotFound,
 }

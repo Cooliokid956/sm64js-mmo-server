@@ -7,6 +7,7 @@ use actix::prelude::*;
 use actix_cors::Cors;
 use actix_http::cookie::SameSite;
 use actix_web::{dev::Server, middleware, App, HttpServer};
+use openssl::ssl::{SslAcceptor, SslFiletype, SslMethod};
 use diesel::{
     r2d2::{self, ConnectionManager},
     PgConnection,
@@ -24,7 +25,7 @@ embed_migrations!("../sm64js-db/migrations");
 #[cfg(feature = "docker")]
 const DIST_FOLDER: &str = "./dist";
 #[cfg(not(feature = "docker"))]
-const DIST_FOLDER: &str = "./client/dist";
+const DIST_FOLDER: &str = "./sm64js/dist";
 
 #[cfg(debug_assertions)]
 const LOG_LEVEL: &str = "actix_server=debug,actix_web=debug";
@@ -63,6 +64,13 @@ pub fn main() -> std::io::Result<Server> {
     // if !response.status().is_success() {
     //     panic!("Could not fetch Google Discovery document");
     // }
+
+    // load TLS keys
+    let mut builder = SslAcceptor::mozilla_intermediate(SslMethod::tls()).unwrap();
+    builder
+        .set_private_key_file("key.pem", SslFiletype::PEM)
+        .unwrap();
+    builder.set_certificate_chain_file("cert.pem").unwrap();
 
     Ok(HttpServer::new(move || {
         let spec = DefaultApiRaw {
@@ -149,6 +157,6 @@ A session cookie will then be stored in the user's browser that can be used to f
             .service(actix_files::Files::new("/apidoc", "./openapi").index_file("index.html"))
             .service(actix_files::Files::new("/", DIST_FOLDER).index_file("index.html"))
     })
-    .bind("0.0.0.0:3060")?
+    .bind_openssl("0.0.0.0:9300",builder)?
     .run())
 }

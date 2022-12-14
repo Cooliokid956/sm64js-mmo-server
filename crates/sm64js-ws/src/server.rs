@@ -466,9 +466,9 @@ impl Handler<SendPlayerList> for Sm64JsServer {
 
         actix::spawn(async move {
             #[cfg(debug_assertions)]
-            let channel_id = "831511367763623966";
+            let channel_id = "984566141391351888";
             #[cfg(not(debug_assertions))]
-            let channel_id = "831428759655284797";
+            let channel_id = "984566141391351888";
             #[cfg(debug_assertions)]
             let message_id = "831512522308845568";
             #[cfg(not(debug_assertions))]
@@ -612,8 +612,10 @@ impl Sm64JsServer {
             &chat_msg.message,
             self.rooms.clone(),
         ) {
-            ChatResult::Ok((message, is_spam)) => {
-                if is_spam || message.is_empty() {
+            // ChatResult::Ok((message, is_spam)) => {
+            ChatResult::Ok(message) => {
+                // if is_spam || message.is_empty() {
+                if message.is_empty() {
                     None
                 } else {
                     chat_msg.message = message;

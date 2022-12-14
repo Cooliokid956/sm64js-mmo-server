@@ -171,7 +171,7 @@ async fn login_with_discord(
     let request: SendClientRequest = awc::Client::default()
         .get(format!(
             "https://discord.com/api/guilds/{}/members/{}",
-            "755122837077098630", discord_user.id
+            "984565998126530641", discord_user.id
         ))
         .header(
             awc::http::header::AUTHORIZATION,
